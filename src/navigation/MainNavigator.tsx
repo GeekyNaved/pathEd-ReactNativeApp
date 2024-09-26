@@ -7,6 +7,7 @@ import ChooseUserType from '../screens/ChooseUserType';
 import Login from '../screens/Login/Login';
 import TutorHome from '../screens/tutor/TutorHome';
 import LearnerHome from '../screens/learners/LearnerHome';
+import AddCourse from '../screens/tutor/Courses/AddCourse';
 
 const MainNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -33,6 +34,10 @@ const MainNavigator = () => {
                     name="LearnerHome"
                     component={LearnerHome}
                     options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="AddCourse"
+                    component={AddCourse}
                 />
             </Stack.Navigator>
         </NavigationContainer>

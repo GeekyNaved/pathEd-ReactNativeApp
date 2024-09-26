@@ -12,21 +12,23 @@ const ChooseUserType = () => {
     return (
         <View style={styles.container}>
             <Image source={require('../images/user_type.png')} style={styles.banner} />
-            <Text style={styles.heading}>{SELECT_USER}</Text>
-            <BgButton title={TUTOR_TITLE} color={WHITE}
-                onClick={() => navigation.navigate(
-                    'Login', {
-                    screen: 'tutor',
-                })
-            }
-            />
-            <BorderButton title={LEARNER_TITLE} color={THEME_COLOR}
-                onClick={() => navigation.navigate(
-                    'Login', {
-                    screen: 'learner',
-                }
-                )}
-            />
+            <View style={styles.inner}>
+                <Text style={styles.heading}>{SELECT_USER}</Text>
+                <BgButton title={TUTOR_TITLE} color={WHITE}
+                    onClick={() => navigation.navigate(
+                        'Login', {
+                        screen: 'tutor',
+                    })
+                    }
+                />
+                <BorderButton title={LEARNER_TITLE} color={THEME_COLOR}
+                    onClick={() => navigation.navigate(
+                        'Login', {
+                        screen: 'learner',
+                    }
+                    )}
+                />
+            </View>
         </View>
     );
 };
@@ -41,6 +43,9 @@ const styles = StyleSheet.create({
     banner: {
         width: '100%',
         height: '28%',
+    },
+    inner: {
+        paddingHorizontal: 20,
     },
     heading: {
         fontSize: moderateScale(18),

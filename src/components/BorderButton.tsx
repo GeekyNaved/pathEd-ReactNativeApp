@@ -22,11 +22,11 @@ export default BorderButton;
 
 const styles = StyleSheet.create({
     btn: {
-        width: '90%',
+        // width: '90%',
         height: verticalScale(50),
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: 'center',
+        // alignSelf: 'center',
         marginTop: moderateVerticalScale(20),
         borderRadius: moderateScale(10),
         borderWidth: 1,
