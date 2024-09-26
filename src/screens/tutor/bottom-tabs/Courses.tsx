@@ -1,12 +1,16 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import React from 'react';
 import { moderateScale, verticalScale } from 'react-native-size-matters';
 import { BG_COLOR, THEME_COLOR, WHITE } from '../../../utils/colors';
 import { PlusIcon } from 'react-native-heroicons/solid';
+import CourseItem from '../../../components/courses/CourseItem';
 
 const Courses = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      <FlatList data={[1, 1, 1, 1, 1, 1, 1]} renderItem={({ item, index }) => {
+        return <CourseItem item={item} index={index} data={[1, 1, 1, 1, 1, 1, 1]} />;
+      }} />
       <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddCourse')}>
         <View>
           <PlusIcon color={WHITE} size={moderateScale(25)} />
