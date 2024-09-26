@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         height: '28%',
     },
     inner: {
-        paddingHorizontal: 20,
+        paddingHorizontal: moderateScale(15),
     },
     heading: {
         fontSize: moderateScale(18),

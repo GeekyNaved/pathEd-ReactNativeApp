@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import { GRAY, TEXT_COLOR, THEME_COLOR, WHITE } from '../../../utils/colors';
+import { GRAY, TEXT_COLOR, WHITE } from '../../../utils/colors';
 import { PlusIcon } from 'react-native-heroicons/outline';
 import { moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import CustomInput from '../../../components/CustomInput';
@@ -64,7 +64,7 @@ export default AddCourse;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: moderateScale(20),
+        paddingHorizontal: moderateScale(15),
     },
     addBanner: {
         marginTop: moderateVerticalScale(20),
