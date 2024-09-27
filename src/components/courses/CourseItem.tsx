@@ -1,13 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import { TEXT_COLOR, WHITE } from '../../utils/colors';
+import { useNavigation } from '@react-navigation/native';
 
 const CourseItem = ({ item, index, data }) => {
+    const navigation = useNavigation();
     return (
-        <View style={[styles.container, { marginBottom: data?.length - 1 == index ? moderateScale(100) : moderateVerticalScale(5) }]}>
-            <Image source={{uri: item.banner}} style={styles.banner} />
+        <TouchableOpacity
+            style={[styles.container, { marginBottom: data?.length - 1 == index ? moderateScale(100) : moderateVerticalScale(5) }]}
+            onPress={() => navigation.navigate('CourseView', { item: item })}>
+            <Image source={{ uri: item.banner }} style={styles.banner} />
             <Text style={styles.title}>
                 {item.title}
             </Text>
@@ -18,7 +22,7 @@ const CourseItem = ({ item, index, data }) => {
                 {'Rs.' + item.price}
             </Text>
 
-        </View>
+        </TouchableOpacity>
     );
 };
 
