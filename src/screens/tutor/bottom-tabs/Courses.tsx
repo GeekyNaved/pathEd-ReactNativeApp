@@ -1,15 +1,36 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { moderateScale, verticalScale } from 'react-native-size-matters';
 import { BG_COLOR, THEME_COLOR, WHITE } from '../../../utils/colors';
 import { PlusIcon } from 'react-native-heroicons/solid';
 import CourseItem from '../../../components/courses/CourseItem';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import { useIsFocused } from '@react-navigation/native';
 
 const Courses = ({ navigation }) => {
+  const [courses, setCourses] = useState([]);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    getCourses();
+  }, [isFocused]);
+
+  const getCourses = async () => {
+    const userId = await AsyncStorage.getItem('USERID');
+    const data = await firestore().collection('courses').get();
+    console.log(data.docs);
+    // return;
+    let temp = [];
+    data.docs.forEach(item => {
+      temp.push({ courseId: item.id, ...item.data() });
+    });
+    setCourses(temp);
+  };
   return (
     <View style={styles.container}>
-      <FlatList data={[1, 1, 1, 1, 1, 1, 1]} renderItem={({ item, index }) => {
-        return <CourseItem item={item} index={index} data={[1, 1, 1, 1, 1, 1, 1]} />;
+      <FlatList data={courses} renderItem={({ item, index }) => {
+        return <CourseItem item={item} index={index} data={courses} />;
       }} />
       <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddCourse')}>
         <View>

@@ -15,9 +15,9 @@ const TutorProfile = () => {
   }, [isFocused]);
   const getData = async () => {
     const userId = await AsyncStorage.getItem('USERID');
-    console.log(userId);
+    // console.log(userId);
     const user = await firestore().collection('tutors').doc(userId).get();
-    console.log(user.data());
+    // console.log(user.data());
     if (user.data != null) {
       setUserData(user.data());
     }
