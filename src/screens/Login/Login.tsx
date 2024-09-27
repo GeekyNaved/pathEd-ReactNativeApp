@@ -1,12 +1,65 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BG_COLOR, TEXT_COLOR, WHITE } from '../../utils/colors';
+import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 const ChooseUserType = () => {
     const route = useRoute();
     const navigation = useNavigation();
+    const signIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            // console.log('userInfo', userInfo);
+            storeData(userInfo.data);
+            //   if (isSuccessResponse(response)) {
+            //     setState({ userInfo: response.data });
+            //   } else {
+            //     // sign in was cancelled by user
+            //   }
+        } catch (error) {
+            console.log('error:LOGIN', error);
+            if (isErrorWithCode(error)) {
+                switch (error.code) {
+                    case statusCodes.IN_PROGRESS:
+                        // operation (eg. sign in) already in progress
+                        break;
+                    case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+                        // Android only, play services not available or outdated
+                        break;
+                    default:
+                    // some other error happened
+                }
+            } else {
+                // an error that's not related to google sign in occurred
+            }
+        }
+    };
+
+    const storeData = async data => {
+        const collection = route.params.screen == 'tutor' ? 'tutors' : 'learners';
+        // console.log('data', data.user.id)
+        // return;
+        await firestore().collection(collection).doc(data.user.id).set(data);
+        await AsyncStorage.setItem('NAME', data.user.name);
+        await AsyncStorage.setItem('EMAIL', data.user.email);
+        await AsyncStorage.setItem('USERID', data.user.id);
+        if (route.params.screen == 'tutor') {
+            navigation.navigate('TutorHome');
+        }
+        else {
+            navigation.navigate('LearnersHome');
+        }
+    };
+
+    useEffect(() => {
+        GoogleSignin.configure();
+    }, []);
+
     return (
         <View style={styles.container}>
             <Image source={require('../../images/login.png')} style={styles.banner} />
@@ -15,10 +68,10 @@ const ChooseUserType = () => {
             <TouchableOpacity
                 style={styles.loginBtn} onPress={() => {
                     if (route.params.screen == 'tutor') {
-                        navigation.navigate('TutorHome');
+                        signIn();
                     }
                     else {
-                        navigation.navigate('LearnerHome')
+                        navigation.navigate('LearnerHome');
                     }
                 }}
             >
