@@ -5,7 +5,7 @@ import { PlusIcon } from 'react-native-heroicons/outline';
 import { moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import CustomInput from '../../../components/CustomInput';
 import BgButton from '../../../components/BgButton';
-import { launchCamera } from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,7 +20,7 @@ const AddCourse = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
 
     const addBanner = async () => {
-        const res = await launchCamera({ mediaType: 'photo' });
+        const res = await launchImageLibrary({ mediaType: 'photo' });
         // console.log('res', res)
         if (!res.didCancel) {
             setBannerImage(res);
