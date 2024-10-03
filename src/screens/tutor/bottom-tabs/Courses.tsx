@@ -19,8 +19,6 @@ const Courses = ({ navigation }) => {
   const getCourses = async () => {
     const userId = await AsyncStorage.getItem('USERID');
     const data = await firestore().collection('courses').get();
-    console.log(data.docs);
-    // return;
     let temp = [];
     data.docs.forEach(item => {
       temp.push({ courseId: item.id, ...item.data() });

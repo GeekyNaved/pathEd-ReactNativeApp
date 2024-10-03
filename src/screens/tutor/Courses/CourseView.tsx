@@ -1,13 +1,32 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters';
 import { TEXT_COLOR } from '../../../utils/colors';
 import BorderButton from '../../../components/BorderButton';
+import firestore from '@react-native-firebase/firestore';
+import ChapterItem from './ChapterItem';
 
 const CourseView = () => {
     const route = useRoute();
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
+    const [chapters, setChapters] = useState([]);
+    useEffect(() => {
+        getChapters();
+    }, [isFocused]);
+
+    const getChapters = async () => {
+        const res = await firestore().collection('chapters').get();
+        let temp = [];
+        res.docs.forEach(item => {
+            if (item.data().courseId == route.params.item.courseId) {
+                temp.push({ chapterId: item.id, ...item.data() });
+            }
+        });
+        setChapters(temp);
+    };
+
     return (
         <View style={styles.container}>
             <Image source={{ uri: route.params.item.banner }} style={styles.banner} />
@@ -19,9 +38,14 @@ const CourseView = () => {
                     onClick={() => {
                         navigation.navigate('AddChapter', {
                             data: route.params.item,
-                        })
+                        });
                     }}
                 />
+                <FlatList data={chapters} renderItem={({ item, index }) => {
+                    return (
+                        <ChapterItem item={item} />
+                    );
+                }} />
             </View>
         </View>
     );
