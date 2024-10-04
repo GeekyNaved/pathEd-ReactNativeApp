@@ -1,11 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import { moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters';
+import { moderateScale, moderateVerticalScale, scale, verticalScale } from 'react-native-size-matters';
 import { TEXT_COLOR, WHITE } from '../../utils/colors';
 import { useNavigation } from '@react-navigation/native';
+import { EllipsisVerticalIcon } from 'react-native-heroicons/solid';
 
-const CourseItem = ({ item, index, data }) => {
+const CourseItem = ({ item, index, data, onClickOption }) => {
     const navigation = useNavigation();
     return (
         <TouchableOpacity
@@ -21,6 +22,16 @@ const CourseItem = ({ item, index, data }) => {
             <Text style={[styles.desc, { color: 'green' }]}>
                 {'Rs.' + item.price}
             </Text>
+            <TouchableOpacity
+                style={styles.ellipsisBtn}
+                onPress={onClickOption}
+            >
+                <EllipsisVerticalIcon
+                    size={moderateScale(25)}
+                    color={TEXT_COLOR}
+                />
+
+            </TouchableOpacity>
 
         </TouchableOpacity>
     );
@@ -60,4 +71,13 @@ const styles = StyleSheet.create({
         marginHorizontal: moderateScale(10),
         opacity: 0.8,
     },
+    ellipsisBtn: {
+        position: 'absolute',
+        right: moderateScale(10),
+        top: moderateScale(10),
+        backgroundColor: WHITE,
+        borderWidth: 1,
+        borderRadius: scale(15),
+        borderColor: WHITE,
+    }
 });
