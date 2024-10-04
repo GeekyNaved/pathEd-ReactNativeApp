@@ -15,10 +15,16 @@ const Splash = () => {
 
   const check = async () => {
     const userId = await AsyncStorage.getItem('USERID');
+    const userType = await AsyncStorage.getItem('USERTYPE');
     if (userId != null) {
-      navigation.navigate('TutorHome');
+      if (userType == 'tutors') {
+        navigation.navigate('TutorHome');
+      }
+      else {
+        navigation.navigate('LearnerHome');
+      }
     } else {
-      navigation.navigate('Choose UserType');
+      navigation.navigate('ChooseUserType');
     }
   };
 
@@ -48,5 +54,5 @@ const styles = StyleSheet.create({
     color: TEXT_COLOR,
     fontWeight: '600',
     fontSize: 16,
-  }
+  },
 });

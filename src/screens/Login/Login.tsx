@@ -42,17 +42,18 @@ const ChooseUserType = () => {
 
     const storeData = async data => {
         const collection = route.params.screen == 'tutor' ? 'tutors' : 'learners';
-        // console.log('data', data.user.id)
+        // console.log('collection', collection)
         // return;
         await firestore().collection(collection).doc(data.user.id).set(data);
         await AsyncStorage.setItem('NAME', data.user.name);
         await AsyncStorage.setItem('EMAIL', data.user.email);
         await AsyncStorage.setItem('USERID', data.user.id);
+        await AsyncStorage.setItem('USERTYPE', collection);
         if (route.params.screen == 'tutor') {
             navigation.navigate('TutorHome');
         }
         else {
-            navigation.navigate('LearnersHome');
+            navigation.navigate('LearnerHome');
         }
     };
 
@@ -71,7 +72,8 @@ const ChooseUserType = () => {
                         signIn();
                     }
                     else {
-                        navigation.navigate('LearnerHome');
+                        // navigation.navigate('LearnerHome');
+                        signIn();
                     }
                 }}
             >
