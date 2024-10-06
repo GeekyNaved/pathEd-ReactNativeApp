@@ -13,7 +13,7 @@ const CourseCard1 = ({ item, isFav, onFavClick }) => {
             onPress={() => {
                 navigation.navigate('CourseDetails', {
                     data: item,
-                })
+                });
             }}
         >
             <Image source={{ uri: item.banner }} style={styles.banner} />
@@ -71,5 +71,5 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: scale(15),
         borderColor: WHITE,
-    }
+    },
 });
