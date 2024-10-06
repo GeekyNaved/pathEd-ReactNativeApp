@@ -5,3 +5,4 @@ export const TEXT_COLOR = '#212121';
 export const WHITE = '#ffffff';
 export const GRAY = '#9e9e9e';
 export const LIGHT_GRAY = '#6e6e6e';
+export const YELLOW = '#FFDF00';

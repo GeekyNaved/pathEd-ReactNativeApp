@@ -11,6 +11,8 @@ import AddCourse from '../screens/tutor/Courses/AddCourse';
 import CourseView from '../screens/tutor/Courses/CourseView';
 import AddChapter from '../screens/tutor/Courses/AddChapter';
 import EditCourse from '../components/courses/EditCourse';
+import CourseDetails from '../screens/learners/Courses/CourseDetails';
+import AddReview from '../screens/learners/Courses/reviews/AddReview';
 
 const MainNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -51,8 +53,16 @@ const MainNavigator = () => {
                     component={CourseView}
                 />
                 <Stack.Screen
+                    name="CourseDetails"
+                    component={CourseDetails}
+                />
+                <Stack.Screen
                     name="AddChapter"
                     component={AddChapter}
+                />
+                <Stack.Screen
+                    name="AddReview"
+                    component={AddReview}
                 />
             </Stack.Navigator>
         </NavigationContainer>
