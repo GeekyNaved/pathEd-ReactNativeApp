@@ -48,7 +48,7 @@ const Home = () => {
     const updateFavCourse = async (status, item) => {
         const userId = await AsyncStorage.getItem('USERID');
         let favs = [];
-        console.log('status', status)
+        // console.log('status', status)
         if (status) {
             favs = favCourses.filter(x => x.courseId != item.courseId);
         } else {
@@ -90,7 +90,13 @@ const Home = () => {
                 data={trendingCourses}
                 renderItem={({ item, index }) => {
                     return (
-                        <CourseCard2 item={item} />
+                        <CourseCard2
+                            item={item}
+                            isFav={checkFav(item.courseId)}
+                            onFavClick={() => {
+                                updateFavCourse(checkFav(item.courseId), item);
+                            }}
+                        />
                     );
                 }}
             />

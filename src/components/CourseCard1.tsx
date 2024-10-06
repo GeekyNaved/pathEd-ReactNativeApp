@@ -20,7 +20,7 @@ const CourseCard1 = ({ item, isFav, onFavClick }) => {
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.price}>₹ {item.price}</Text>
             <TouchableOpacity
-                style={styles.starBtn}
+                style={styles.favView}
                 onPress={() => {
                     onFavClick();
                 }}
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         marginLeft: moderateScale(10),
     },
-    starBtn: {
+    favView: {
         position: 'absolute',
         right: moderateScale(10),
         top: moderateScale(10),

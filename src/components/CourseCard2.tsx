@@ -1,17 +1,28 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { moderateScale, scale } from 'react-native-size-matters';
-import { BG_COLOR, TEXT_COLOR } from '../utils/colors';
+import { BG_COLOR, TEXT_COLOR, THEME_COLOR, WHITE } from '../utils/colors';
+import { StarIcon } from 'react-native-heroicons/outline';
 
-const CourseCard2 = ({ item }) => {
+const CourseCard2 = ({ item, isFav, onFavClick }) => {
     return (
         <View style={styles.card}>
             <Image source={{ uri: item.banner }} style={styles.banner} />
             <View>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.price}>₹ {item.price}</Text>
+
             </View>
-        </View>
+            <TouchableOpacity
+                style={styles.favView}
+                onPress={() => {
+                    onFavClick();
+                }}
+            >{isFav ?
+                <StarIcon fill={THEME_COLOR} color={THEME_COLOR} size={scale(30)} /> :
+                <StarIcon color={TEXT_COLOR} size={scale(30)} />}
+            </TouchableOpacity>
+        </View >
     );
 };
 
@@ -45,5 +56,14 @@ const styles = StyleSheet.create({
         color: 'green',
         fontWeight: '600',
         marginLeft: moderateScale(10),
+    },
+    favView: {
+        position: 'absolute',
+        right: moderateScale(10),
+        top: moderateScale(10),
+        backgroundColor: WHITE,
+        borderWidth: 1,
+        borderRadius: scale(15),
+        borderColor: WHITE,
     },
 });

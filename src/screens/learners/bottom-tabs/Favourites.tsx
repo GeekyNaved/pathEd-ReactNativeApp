@@ -7,15 +7,19 @@ import { WHITE } from '../../../utils/colors';
 import FavCourseItem from '../../../components/FavCourseItem';
 import { useIsFocused } from '@react-navigation/native';
 import NoItem from '../../../components/NoItem';
+// import Loader from '../../../components/Loader';
 
 const Favourites = () => {
   const [courses, setCourses] = useState([]);
+  // const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
 
   const getCourses = async () => {
+    // setLoading(true);
     const userId = await AsyncStorage.getItem('USERID');
     const userData = await firestore().collection('learners').doc(userId).get();
     setCourses(userData.data().favCourses);
+    // setLoading(false);
   };
 
   const updateFavCourse = async (item) => {
@@ -50,6 +54,7 @@ const Favourites = () => {
           );
         }}
       />
+      {/* <Loader visible={loading} /> */}
     </View>
   );
 };
