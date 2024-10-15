@@ -9,6 +9,7 @@ import BorderButton from '../../../components/BorderButton';
 import BgButton from '../../../components/BgButton';
 import { UserIcon } from 'react-native-heroicons/outline';
 import { StarIcon } from 'react-native-heroicons/solid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CourseDetails = () => {
     const route = useRoute();
@@ -16,17 +17,20 @@ const CourseDetails = () => {
     const [courseData, setCourseData] = useState(null);
     const [chapters, setChapters] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [cartItemsData, setCartItemsData] = useState([]);
+    const [isItemPresent, setIsItemPresent] = useState(false);
     const navigation = useNavigation();
     useEffect(() => {
         getCourseDetails();
         getChapters();
         getReviews();
+        checkCartItems();
     }, [isFocused]);
 
     const getCourseDetails = async () => {
         const res = await firestore().collection('courses').doc(route.params.data.courseId).get();
         setCourseData(res.data());
-        // console.log('res.data()', res.data());
+        // console.log('res.data()===>>>>>>>>>>>>>>>', res.data());
     };
 
     const getChapters = async () => {
@@ -38,6 +42,54 @@ const CourseDetails = () => {
             }
         });
         setChapters(temp);
+    };
+
+    // to check items is present in cart or not
+    const checkCartItems = async () => {
+        const userId = await AsyncStorage.getItem('USERID');
+        const userData = await firestore().collection('learners').doc(userId).get();
+        setCartItemsData(userData.data().cartItems);
+        let tempCartItems = userData.data().cartItems;
+        let isPresent = false;
+        if (tempCartItems.length == 0) {
+            setIsItemPresent(false);
+        } else {
+            tempCartItems.map(item => {
+                console.log('item.courseId', item.courseId);
+                console.log('route.params.data.courseId', route.params.data.courseId)
+                if (item.courseId == route.params.data.courseId) {
+                    isPresent = true;
+                    setIsItemPresent(isPresent);
+                }
+                else {
+                    setIsItemPresent(isPresent);
+                }
+            });
+        }
+    };
+
+    // add / remove course from cart
+    const updateCartItem = async (item, courseId) => {
+        console.log('item==>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', item);
+        const userId = await AsyncStorage.getItem('USERID');
+        let cartItems = [];
+        // console.log('isItemPresent', isItemPresent)
+        // remove item
+        if (isItemPresent) {
+            cartItems = cartItemsData.filter(x => x.courseId != courseId);
+        }
+        // add item
+        else {
+            cartItems = cartItemsData;
+            // appending courseId with item array and pushing it
+            cartItems.push({ courseId: courseId, ...item });
+        }
+        await firestore().collection('learners').doc(userId).update({
+            cartItems: cartItems,
+        });
+        checkCartItems();
+        // getCourseDetails();
+        // setFavCourses(userData.data()?.favCourses);
     };
 
     const getReviews = async () => {
@@ -67,6 +119,11 @@ const CourseDetails = () => {
             }
             <View style={styles.buyBtn}>
                 <BgButton title={'Buy Course'} color={'white'} />
+                <BorderButton
+                    title={isItemPresent ? 'Remove from Cart' : 'Add to Cart'}
+                    color={TEXT_COLOR}
+                    onClick={() => updateCartItem(courseData, route.params.data.courseId)}
+                />
             </View>
             <View style={styles.seperator} />
             <Text style={styles.title}>Chapters</Text>

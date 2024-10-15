@@ -3,10 +3,19 @@ import React from 'react';
 import { moderateScale, scale } from 'react-native-size-matters';
 import { BG_COLOR, TEXT_COLOR, THEME_COLOR, WHITE } from '../utils/colors';
 import { StarIcon } from 'react-native-heroicons/outline';
+import { useNavigation } from '@react-navigation/native';
 
 const CourseCard2 = ({ item, isFav, onFavClick }) => {
+    const navigation = useNavigation();
     return (
-        <View style={styles.card}>
+        <TouchableOpacity
+            style={styles.card}
+            onPress={() => {
+                navigation.navigate('CourseDetails', {
+                    data: item,
+                });
+            }}
+        >
             <Image source={{ uri: item.banner }} style={styles.banner} />
             <View>
                 <Text style={styles.title}>{item.title}</Text>
@@ -22,7 +31,7 @@ const CourseCard2 = ({ item, isFav, onFavClick }) => {
                 <StarIcon fill={THEME_COLOR} color={THEME_COLOR} size={scale(30)} /> :
                 <StarIcon color={TEXT_COLOR} size={scale(30)} />}
             </TouchableOpacity>
-        </View >
+        </TouchableOpacity>
     );
 };
 
