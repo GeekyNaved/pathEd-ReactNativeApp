@@ -7,6 +7,7 @@ import { GRAY, TEXT_COLOR } from '../../../utils/colors';
 import { moderateScale } from 'react-native-size-matters';
 import CartItem from '../../../components/CartItem';
 import NoItem from '../../../components/NoItem';
+import BgButton from '../../../components/BgButton';
 
 const Cart = () => {
   const isFocused = useIsFocused();
@@ -46,6 +47,10 @@ const Cart = () => {
         <View style={styles.totalContainer}>
           <Text style={styles.total}>Total: </Text>
           <Text style={styles.price}>₹ {totalAmount}</Text>
+        </View> : null}
+      {cartItems.length > 0 ?
+        <View style={styles.checkoutBtn}>
+          <BgButton title={'Checkout'} color={'white'} />
         </View> : null}
       {cartItems.length > 0 ?
         <Text style={styles.itemCount}>{cartItems.length} Course in Cart</Text> : null}
@@ -99,6 +104,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: GRAY,
     paddingBottom: moderateScale(10),
-    marginTop: moderateScale(50),
+    marginTop: moderateScale(20),
   },
+  checkoutBtn: {
+    margin: moderateScale(15),
+},
 });
