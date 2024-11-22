@@ -18,13 +18,16 @@ const CourseDetails = () => {
     const [chapters, setChapters] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [cartItemsData, setCartItemsData] = useState([]);
+    const [purchasedItemsData, setPurchasedItemsData] = useState([]);
     const [isItemPresent, setIsItemPresent] = useState(false);
+    const [isItemPurchased, setIsItemPurchased] = useState(false);
     const navigation = useNavigation();
     useEffect(() => {
         getCourseDetails();
         getChapters();
         getReviews();
         checkCartItems();
+        checkPurchasedItems();
     }, [isFocused]);
 
     const getCourseDetails = async () => {
@@ -56,13 +59,38 @@ const CourseDetails = () => {
         } else {
             tempCartItems.map(item => {
                 console.log('item.courseId', item.courseId);
-                console.log('route.params.data.courseId', route.params.data.courseId)
+                console.log('route.params.data.courseId', route.params.data.courseId);
                 if (item.courseId == route.params.data.courseId) {
                     isPresent = true;
                     setIsItemPresent(isPresent);
                 }
                 else {
                     setIsItemPresent(isPresent);
+                }
+            });
+        }
+    };
+
+    // to check items is present in cart or not
+    const checkPurchasedItems = async () => {
+        const userId = await AsyncStorage.getItem('USERID');
+        const userData = await firestore().collection('learners').doc(userId).get();
+        // setCartItemsData(userData.data().cartItems);
+        setPurchasedItemsData(userData.data().purchasedCourses);
+        let tempCartItems = userData.data().purchasedCourses;
+        let isPresent = false;
+        if (tempCartItems.length == 0) {
+            setIsItemPurchased(false);
+        } else {
+            tempCartItems.map(item => {
+                console.log('item.courseId', item.courseId);
+                console.log('route.params.data.courseId', route.params.data.courseId);
+                if (item.courseId == route.params.data.courseId) {
+                    isPresent = true;
+                    setIsItemPurchased(isPresent);
+                }
+                else {
+                    setIsItemPurchased(isPresent);
                 }
             });
         }
@@ -103,6 +131,18 @@ const CourseDetails = () => {
         setReviews(temp);
     };
 
+    // buy course
+    const buyCourse = async (item, courseId) => {
+        const userId = await AsyncStorage.getItem('USERID');
+        let course = [];
+        course = purchasedItemsData;
+        course.push({ courseId: courseId, chapters: chapters, ...item });
+        await firestore().collection('learners').doc(userId).update({
+            purchasedCourses: course,
+        });
+        checkPurchasedItems();
+    };
+
     return (
         <ScrollView style={styles.container} >
             {
@@ -118,12 +158,19 @@ const CourseDetails = () => {
                 <Text style={styles.desc}>{courseData.description}</Text>
             }
             <View style={styles.buyBtn}>
-                <BgButton title={'Buy Course'} color={'white'} />
-                <BorderButton
-                    title={isItemPresent ? 'Remove from Cart' : 'Add to Cart'}
-                    color={TEXT_COLOR}
-                    onClick={() => updateCartItem(courseData, route.params.data.courseId)}
+                <BgButton title={isItemPurchased ? 'Purchased - Watch Now' : 'Buy Course'} color={'white'}
+                    onClick={
+                        isItemPurchased ? () => navigation.navigate('MyLearnings') :
+                            () => buyCourse(courseData, route.params.data.courseId)}
                 />
+                {
+                    !isItemPurchased &&
+                    <BorderButton
+                        title={isItemPresent ? 'Remove from Cart' : 'Add to Cart'}
+                        color={TEXT_COLOR}
+                        onClick={() => updateCartItem(courseData, route.params.data.courseId)}
+                    />
+                }
             </View>
             <View style={styles.seperator} />
             <Text style={styles.title}>Chapters</Text>

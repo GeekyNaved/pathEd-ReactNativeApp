@@ -2,19 +2,24 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { moderateScale, scale } from 'react-native-size-matters';
 import { BG_COLOR, TEXT_COLOR, THEME_COLOR } from '../utils/colors';
+import { useNavigation } from '@react-navigation/native';
 
-const CartItem = ({ item, onRemoveClick }) => {
+const CartItem = ({ item, onRemoveClick, onPress }) => {
     return (
-        <View style={styles.card}>
+        <TouchableOpacity
+            style={styles.card}
+            onPress={onPress}
+        >
             <Image source={{ uri: item.banner }} style={styles.banner} />
             <View>
                 <Text style={styles.title}>{item.title}</Text>
-                <TouchableOpacity onPress={() => onRemoveClick()}>
-                    <Text style={styles.remove}>Remove</Text>
-                </TouchableOpacity>
+                {onPress == null &&
+                    <TouchableOpacity onPress={() => onRemoveClick()}>
+                        <Text style={styles.remove}>Remove</Text>
+                    </TouchableOpacity>}
             </View>
             <Text style={styles.price}>₹ {item.price}</Text>
-        </View>
+        </TouchableOpacity>
     );
 };
 

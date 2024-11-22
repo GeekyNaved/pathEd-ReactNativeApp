@@ -13,6 +13,7 @@ import AddChapter from '../screens/tutor/Courses/AddChapter';
 import EditCourse from '../components/courses/EditCourse';
 import CourseDetails from '../screens/learners/Courses/CourseDetails';
 import AddReview from '../screens/learners/Courses/reviews/AddReview';
+import WatchVideo from '../screens/learners/Courses/WatchVideo';
 
 const MainNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -55,6 +56,10 @@ const MainNavigator = () => {
                 <Stack.Screen
                     name="CourseDetails"
                     component={CourseDetails}
+                />
+                <Stack.Screen
+                    name="WatchVideo"
+                    component={WatchVideo}
                 />
                 <Stack.Screen
                     name="AddChapter"

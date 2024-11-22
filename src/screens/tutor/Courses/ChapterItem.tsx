@@ -4,11 +4,12 @@ import React from 'react';
 import { moderateScale, scale } from 'react-native-size-matters';
 import { BG_COLOR, TEXT_COLOR } from '../../../utils/colors';
 
-const ChapterItem = ({ item }) => {
+const ChapterItem = ({ item, onClick }) => {
     return (
         <TouchableOpacity
             style={styles.container}
-            disabled={item.isLocked ? true : false}
+            onPress={() => onClick(item)}
+            disabled={item.isLocked || onClick == null ? true : false}
         >
             <Image
                 source={{ uri: item.banner }}

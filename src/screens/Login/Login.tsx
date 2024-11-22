@@ -44,7 +44,7 @@ const ChooseUserType = () => {
         const collection = route.params.screen == 'tutor' ? 'tutors' : 'learners';
         // console.log('collection', collection)
         // return;
-        await firestore().collection(collection).doc(data.user.id).set({ ...data, favCourses: [], cartItems: [] });
+        await firestore().collection(collection).doc(data.user.id).set({ ...data, favCourses: [], cartItems: [], purchasedCourses: [] });
         await AsyncStorage.setItem('NAME', data.user.name);
         await AsyncStorage.setItem('EMAIL', data.user.email);
         await AsyncStorage.setItem('USERID', data.user.id);

@@ -8,12 +8,15 @@ import {
   StarIcon,
   MagnifyingGlassIcon,
   UserIcon,
+  BookmarkIcon,
 } from 'react-native-heroicons/outline';
 import Home from './bottom-tabs/Home';
-import Search from './bottom-tabs/Search';
+// import Search from './bottom-tabs/Search';
 import Cart from './bottom-tabs/Cart';
 import Profile from './bottom-tabs/Profile';
 import Favourites from './bottom-tabs/Favourites';
+import WatchVideo from './Courses/WatchVideo';
+import MyLearnings from './Courses/MyLearnings';
 
 
 const Tab = createBottomTabNavigator();
@@ -32,6 +35,12 @@ const LearnerHome = () => {
               <BookOpenIcon color={THEME_COLOR} size={25} fill={THEME_COLOR} />
             ) : (
               <BookOpenIcon color={TEXT_COLOR} size={25} />
+            );
+          } else if (route.name === 'MyLearnings') {
+            iconName = focused ? (
+              <BookmarkIcon color={THEME_COLOR} size={25} fill={THEME_COLOR} />
+            ) : (
+              <BookmarkIcon color={TEXT_COLOR} size={25} />
             );
           } else if (route.name === 'Search') {
             iconName = focused ? (
@@ -106,7 +115,8 @@ const LearnerHome = () => {
 
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Search" component={Search} />
+      {/* <Tab.Screen name="Search" component={Search} /> */}
+      <Tab.Screen name="MyLearnings" component={MyLearnings} />
       <Tab.Screen name="Favourites" component={Favourites} />
       <Tab.Screen name="Cart" component={Cart} />
       <Tab.Screen name="Profile" component={Profile} />
