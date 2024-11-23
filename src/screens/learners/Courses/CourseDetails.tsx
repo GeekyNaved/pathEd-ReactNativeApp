@@ -58,8 +58,8 @@ const CourseDetails = () => {
             setIsItemPresent(false);
         } else {
             tempCartItems.map(item => {
-                console.log('item.courseId', item.courseId);
-                console.log('route.params.data.courseId', route.params.data.courseId);
+                // console.log('item.courseId', item.courseId);
+                // console.log('route.params.data.courseId', route.params.data.courseId);
                 if (item.courseId == route.params.data.courseId) {
                     isPresent = true;
                     setIsItemPresent(isPresent);
@@ -131,16 +131,27 @@ const CourseDetails = () => {
         setReviews(temp);
     };
 
-    // buy course
     const buyCourse = async (item, courseId) => {
-        const userId = await AsyncStorage.getItem('USERID');
-        let course = [];
-        course = purchasedItemsData;
-        course.push({ courseId: courseId, chapters: chapters, ...item });
-        await firestore().collection('learners').doc(userId).update({
-            purchasedCourses: course,
-        });
-        checkPurchasedItems();
+        try {
+            const userId = await AsyncStorage.getItem('USERID');
+
+            // Fetch the latest data from Firestore to avoid overwriting issues
+            const userDoc = await firestore().collection('learners').doc(userId).get();
+            let purchasedCourses = userDoc.data()?.purchasedCourses || [];
+
+            // Push the new course into the existing array
+            purchasedCourses.push({ courseId: courseId, chapters: chapters, ...item });
+
+            // Update Firestore with the new array
+            await firestore().collection('learners').doc(userId).update({
+                purchasedCourses,
+            });
+
+            console.log('Course successfully purchased!');
+            checkPurchasedItems(); // Refresh local data
+        } catch (error) {
+            console.error('Error buying course:', error);
+        }
     };
 
     return (
