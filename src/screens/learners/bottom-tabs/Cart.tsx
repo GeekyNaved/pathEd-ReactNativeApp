@@ -13,7 +13,35 @@ const Cart = () => {
   const isFocused = useIsFocused();
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [purchasedItems, setPurchasedItems] = useState([]);
   const navigation = useNavigation();
+
+  // to get purhased items
+  const getPurchasedItems = async () => {
+    const userId = await AsyncStorage.getItem('USERID');
+    const userData = await firestore().collection('learners').doc(userId).get();
+    // setCartItemsData(userData.data().cartItems);
+    setPurchasedItems(userData.data().purchasedCourses);
+  };
+
+  // buy course
+  const checkout = async () => {
+    const userId = await AsyncStorage.getItem('USERID');
+    let course = [];
+    course = purchasedItems;
+    // course.push({ courseId: courseId, chapters: chapters, ...item });
+    course.push(...cartItems);
+    await firestore().collection('learners').doc(userId).update({
+      purchasedCourses: course,
+    });
+    navigation.navigate("MyLearnings");
+    // deleting all cart Items
+    await firestore().collection('learners').doc(userId).update({
+      cartItems: [],
+    });
+
+    getCartItems();
+  };
 
   const getCartItems = async () => {
     const userId = await AsyncStorage.getItem('USERID');
@@ -25,6 +53,7 @@ const Cart = () => {
 
     setTotalAmount(total);
     setCartItems(items.data()?.cartItems);
+    // console.log('items.data()?.cartItems', items.data()?.cartItems)
   };
 
   const removeCartItem = async (item) => {
@@ -40,6 +69,7 @@ const Cart = () => {
 
   useEffect(() => {
     getCartItems();
+    getPurchasedItems();
   }, [isFocused]);
 
   return (
@@ -51,7 +81,7 @@ const Cart = () => {
         </View> : null}
       {cartItems.length > 0 ?
         <View style={styles.checkoutBtn}>
-          <BgButton title={'Checkout'} color={'white'} />
+          <BgButton title={'Checkout'} color={'white'} onClick={checkout} />
         </View> : null}
       {cartItems.length > 0 ?
         <Text style={styles.itemCount}>{cartItems.length} Course in Cart</Text> : null}
