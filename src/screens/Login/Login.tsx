@@ -41,19 +41,40 @@ const ChooseUserType = () => {
     };
 
     const storeData = async data => {
-        const collection = route.params.screen == 'tutor' ? 'tutors' : 'learners';
-        // console.log('collection', collection)
-        // return;
-        await firestore().collection(collection).doc(data.user.id).set({ ...data, favCourses: [], cartItems: [], purchasedCourses: [] });
-        await AsyncStorage.setItem('NAME', data.user.name);
-        await AsyncStorage.setItem('EMAIL', data.user.email);
-        await AsyncStorage.setItem('USERID', data.user.id);
-        await AsyncStorage.setItem('USERTYPE', collection);
-        if (route.params.screen == 'tutor') {
-            navigation.navigate('TutorHome');
-        }
-        else {
-            navigation.navigate('LearnerHome');
+        const collection = route.params.screen === 'tutor' ? 'tutors' : 'learners';
+        const userDocRef = firestore().collection(collection).doc(data.user.id);
+        try {
+            const userDoc = await userDocRef.get();
+
+            if (!userDoc.exists) {
+                // New user: create a document with default values
+                await userDocRef.set({
+                    ...data,
+                    favCourses: [],
+                    cartItems: [],
+                    purchasedCourses: [],
+                });
+            } else {
+                // Existing user: update only relevant fields or skip updating
+                await userDocRef.update({
+                    ...data, // Add any additional fields you want to update
+                });
+            }
+
+            // Store data locally in AsyncStorage
+            await AsyncStorage.setItem('NAME', data.user.name);
+            await AsyncStorage.setItem('EMAIL', data.user.email);
+            await AsyncStorage.setItem('USERID', data.user.id);
+            await AsyncStorage.setItem('USERTYPE', collection);
+
+            // Navigate to the appropriate screen
+            if (route.params.screen === 'tutor') {
+                navigation.navigate('TutorHome');
+            } else {
+                navigation.navigate('LearnerHome');
+            }
+        } catch (error) {
+            console.error('Error storing user data:', error);
         }
     };
 
