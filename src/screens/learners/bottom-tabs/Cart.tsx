@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import { GRAY, TEXT_COLOR } from '../../../utils/colors';
 import { moderateScale } from 'react-native-size-matters';
@@ -13,6 +13,7 @@ const Cart = () => {
   const isFocused = useIsFocused();
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const navigation = useNavigation();
 
   const getCartItems = async () => {
     const userId = await AsyncStorage.getItem('USERID');
@@ -64,6 +65,11 @@ const Cart = () => {
               onRemoveClick={() => {
                 removeCartItem(item);
               }}
+              onPress={() => {
+                navigation.navigate('CourseDetails', {
+                  data: item,
+                });
+              }}
               item={item}
             />
           );
@@ -108,5 +114,5 @@ const styles = StyleSheet.create({
   },
   checkoutBtn: {
     margin: moderateScale(15),
-},
+  },
 });

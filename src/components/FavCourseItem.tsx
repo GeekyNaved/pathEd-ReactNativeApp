@@ -4,9 +4,9 @@ import { moderateScale, scale } from 'react-native-size-matters';
 import { BG_COLOR, TEXT_COLOR, THEME_COLOR, WHITE } from '../utils/colors';
 import { StarIcon } from 'react-native-heroicons/solid';
 
-const FavCourseItem = ({ item, onFavClick }) => {
+const FavCourseItem = ({ item, onFavClick, onPress }) => {
     return (
-        <View style={styles.card}>
+        <TouchableOpacity onPress={onPress} style={styles.card}>
             <Image source={{ uri: item.banner }} style={styles.banner} />
             <View>
                 <Text style={styles.title}>{item.title}</Text>
@@ -20,7 +20,7 @@ const FavCourseItem = ({ item, onFavClick }) => {
             >
                 <StarIcon fill={THEME_COLOR} color={THEME_COLOR} size={scale(30)} />
             </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
     );
 };
 

@@ -5,7 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WHITE } from '../../../utils/colors';
 import FavCourseItem from '../../../components/FavCourseItem';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import NoItem from '../../../components/NoItem';
 // import Loader from '../../../components/Loader';
 
@@ -13,6 +13,7 @@ const Favourites = () => {
   const [courses, setCourses] = useState([]);
   // const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
 
   const getCourses = async () => {
     // setLoading(true);
@@ -48,6 +49,11 @@ const Favourites = () => {
             <FavCourseItem
               onFavClick={() => {
                 updateFavCourse(item);
+              }}
+              onPress={() => {
+                navigation.navigate('CourseDetails', {
+                  data: item,
+                });
               }}
               item={item}
             />
