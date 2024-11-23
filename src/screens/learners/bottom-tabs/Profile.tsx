@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import { UserIcon } from 'react-native-heroicons/outline';
 import BorderButton from '../../../components/BorderButton';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const Profile = ({ navigation }) => {
     const isFocused = useIsFocused();
@@ -16,17 +17,27 @@ const Profile = ({ navigation }) => {
     }, [isFocused]);
     const getData = async () => {
         const userId = await AsyncStorage.getItem('USERID');
-        // console.log(userId);
-        const user = await firestore().collection('tutors').doc(userId).get();
-        // console.log(user.data());
+        // console.log('userId', userId);
+        const userType = await AsyncStorage.getItem('USERTYPE');
+        // console.log('userType', userType);
+        const user = await firestore().collection(userType).doc(userId).get();
+        // console.log("user.data()", user.data());
         if (user.data != null) {
             setUserData(user.data());
         }
     };
 
     const onLogout = async () => {
-        await AsyncStorage.clear();
-        navigation.navigate('ChooseUserType');
+        try {
+            await GoogleSignin.signOut();
+            await AsyncStorage.clear();
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'ChooseUserType' }], // Reset stack to Login screen
+            });
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
     };
 
     return (
