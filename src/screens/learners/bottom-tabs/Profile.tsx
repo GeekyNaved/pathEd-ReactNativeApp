@@ -34,6 +34,7 @@ const Profile = ({ navigation }) => {
 
     const onLogout = async () => {
         try {
+            GoogleSignin.configure();
             await GoogleSignin.signOut();
             await AsyncStorage.clear();
             navigation.reset({
