@@ -109,8 +109,8 @@ const CourseDetails = () => {
         // add item
         else {
             cartItems = cartItemsData;
-            // appending courseId with item array and pushing it
-            cartItems.push({ courseId: courseId, ...item });
+            // appending courseId & chapters with cart item array and pushing it
+            cartItems.push({ courseId: courseId, chapters: chapters, ...item });
         }
         await firestore().collection('learners').doc(userId).update({
             cartItems: cartItems,
