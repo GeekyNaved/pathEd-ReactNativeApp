@@ -3,24 +3,23 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WHITE } from '../../../utils/colors';
 import FavCourseItem from '../../../components/FavCourseItem';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import NoItem from '../../../components/NoItem';
-// import Loader from '../../../components/Loader';
+import Loader from '../../../components/Loader';
 
 const Favourites = () => {
   const [courses, setCourses] = useState([]);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
   const navigation = useNavigation();
 
   const getCourses = async () => {
-    // setLoading(true);
+    setLoading(true);
     const userId = await AsyncStorage.getItem('USERID');
     const userData = await firestore().collection('learners').doc(userId).get();
     setCourses(userData.data().favCourses);
-    // setLoading(false);
+    setLoading(false);
   };
 
   const updateFavCourse = async (item) => {
@@ -60,7 +59,7 @@ const Favourites = () => {
           );
         }}
       />
-      {/* <Loader visible={loading} /> */}
+      <Loader visible={isFocused && loading} isTransparent={false} />
     </View>
   );
 };

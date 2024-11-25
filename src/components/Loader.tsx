@@ -3,9 +3,9 @@ import React from 'react';
 import { THEME_COLOR, WHITE } from '../utils/colors';
 import { moderateScale, scale } from 'react-native-size-matters';
 
-const Loader = ({ visible }) => {
+const Loader = ({ visible, isTransparent = true }) => {
     return (
-        <Modal transparent visible={visible}>
+        <Modal transparent={isTransparent} visible={visible}>
             <View style={styles.container}>
                 <View style={styles.inner}>
                     <ActivityIndicator size={'large'} color={THEME_COLOR} />

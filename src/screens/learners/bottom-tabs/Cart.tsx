@@ -8,12 +8,14 @@ import { moderateScale } from 'react-native-size-matters';
 import CartItem from '../../../components/CartItem';
 import NoItem from '../../../components/NoItem';
 import BgButton from '../../../components/BgButton';
+import Loader from '../../../components/Loader';
 
 const Cart = () => {
   const isFocused = useIsFocused();
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [purchasedItems, setPurchasedItems] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
   // to get purhased items
@@ -44,6 +46,7 @@ const Cart = () => {
   };
 
   const getCartItems = async () => {
+    setLoading(true);
     const userId = await AsyncStorage.getItem('USERID');
     const items = await firestore().collection('learners').doc(userId).get();
     // Calculate the total amount by summing the prices of all cart items
@@ -53,6 +56,8 @@ const Cart = () => {
 
     setTotalAmount(total);
     setCartItems(items.data()?.cartItems);
+    setLoading(false);
+
     // console.log('items.data()?.cartItems', items.data()?.cartItems)
   };
 
@@ -105,6 +110,7 @@ const Cart = () => {
           );
         }}
       />
+      <Loader visible={isFocused && loading} isTransparent={false} />
 
     </View>
   );

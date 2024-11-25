@@ -8,14 +8,18 @@ import firestore from '@react-native-firebase/firestore';
 import { UserIcon } from 'react-native-heroicons/outline';
 import BorderButton from '../../../components/BorderButton';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Loader from '../../../components/Loader';
 
 const Profile = ({ navigation }) => {
     const isFocused = useIsFocused();
     const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         getData();
     }, [isFocused]);
     const getData = async () => {
+        setLoading(true);
         const userId = await AsyncStorage.getItem('USERID');
         // console.log('userId', userId);
         const userType = await AsyncStorage.getItem('USERTYPE');
@@ -25,6 +29,7 @@ const Profile = ({ navigation }) => {
         if (user.data != null) {
             setUserData(user.data());
         }
+        setLoading(false);
     };
 
     const onLogout = async () => {
@@ -61,6 +66,8 @@ const Profile = ({ navigation }) => {
                     onClick={onLogout}
                 />
             </View>
+            <Loader visible={isFocused && loading} isTransparent={false} />
+
         </View>
     );
 };

@@ -11,17 +11,21 @@ import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartItem from '../../../components/CartItem';
 import NoItem from '../../../components/NoItem';
+import Loader from '../../../components/Loader';
 
 
 const MyLearnings = () => {
     const isFocused = useIsFocused();
     const [purchasedItems, setPurchasedItems] = useState([]);
+    const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
 
     const getCourses = async () => {
+        setLoading(true);
         const userId = await AsyncStorage.getItem('USERID');
         const items = await firestore().collection('learners').doc(userId).get();
         setPurchasedItems(items.data()?.purchasedCourses);
+        setLoading(false);
     };
 
     // const deleteCourse = async (item) => {
@@ -45,7 +49,7 @@ const MyLearnings = () => {
             {/* <View style={styles.seperator} /> */}
             <FlatList
                 data={purchasedItems}
-                ListEmptyComponent={() => <NoItem message={'No Items Present in watch list'} />}
+                ListEmptyComponent={() => <NoItem message={'No Items Present'} />}
                 renderItem={({ item }) => {
                     return (
                         <CartItem
@@ -59,6 +63,8 @@ const MyLearnings = () => {
                     );
                 }}
             />
+            <Loader visible={isFocused && loading} isTransparent={false} />
+
         </View>
     );
 };

@@ -10,6 +10,7 @@ import BgButton from '../../../components/BgButton';
 import { UserIcon } from 'react-native-heroicons/outline';
 import { StarIcon } from 'react-native-heroicons/solid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../../../components/Loader';
 
 const CourseDetails = () => {
     const route = useRoute();
@@ -21,6 +22,8 @@ const CourseDetails = () => {
     const [purchasedItemsData, setPurchasedItemsData] = useState([]);
     const [isItemPresent, setIsItemPresent] = useState(false);
     const [isItemPurchased, setIsItemPurchased] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const navigation = useNavigation();
     useEffect(() => {
         getCourseDetails();
@@ -31,9 +34,11 @@ const CourseDetails = () => {
     }, [isFocused]);
 
     const getCourseDetails = async () => {
+        setLoading(true);
         const res = await firestore().collection('courses').doc(route.params.data.courseId).get();
         setCourseData(res.data());
         // console.log('res.data()===>>>>>>>>>>>>>>>', res.data());
+        setLoading(false);
     };
 
     const getChapters = async () => {
@@ -98,6 +103,7 @@ const CourseDetails = () => {
 
     // add / remove course from cart
     const updateCartItem = async (item, courseId) => {
+        setLoading(true);
         console.log('item==>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', item);
         const userId = await AsyncStorage.getItem('USERID');
         let cartItems = [];
@@ -115,6 +121,7 @@ const CourseDetails = () => {
         await firestore().collection('learners').doc(userId).update({
             cartItems: cartItems,
         });
+        setLoading(false);
         checkCartItems();
         // getCourseDetails();
         // setFavCourses(userData.data()?.favCourses);
@@ -132,6 +139,7 @@ const CourseDetails = () => {
     };
 
     const buyCourse = async (item, courseId) => {
+        setLoading(true);
         try {
             const userId = await AsyncStorage.getItem('USERID');
 
@@ -152,6 +160,7 @@ const CourseDetails = () => {
         } catch (error) {
             console.error('Error buying course:', error);
         }
+        setLoading(false);
     };
 
     return (
@@ -184,7 +193,7 @@ const CourseDetails = () => {
                 }
             </View>
             <View style={styles.seperator} />
-            <Text style={styles.title}>Chapters</Text>
+            {chapters?.length > 0 && <Text style={styles.title}>Chapters</Text>}
             {
                 courseData != null &&
                 <FlatList
@@ -213,7 +222,7 @@ const CourseDetails = () => {
                                 </View>
                                 <Text style={styles.review}>{item.review}</Text>
                             </View>
-                        )
+                        );
                     }}
                 />}
             <View style={styles.btnMargin}>
@@ -227,6 +236,8 @@ const CourseDetails = () => {
                     }}
                 />
             </View>
+            <Loader visible={isFocused && loading} isTransparent={false} />
+
         </ScrollView>
     );
 };
