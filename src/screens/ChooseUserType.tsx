@@ -11,7 +11,7 @@ const ChooseUserType = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <Image source={require('../images/user_type.png')} style={styles.banner} />
+            <Image source={require('../images/user_type.jpg')} style={styles.banner} />
             <View style={styles.inner}>
                 <Text style={styles.heading}>{SELECT_USER}</Text>
                 <BgButton title={TUTOR_TITLE} color={WHITE}
