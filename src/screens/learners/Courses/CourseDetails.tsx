@@ -177,6 +177,10 @@ const CourseDetails = () => {
                 courseData != null &&
                 <Text style={styles.desc}>{courseData.description}</Text>
             }
+            {
+                courseData != null &&
+                <Text style={styles.author}>Author: {courseData.userName}</Text>
+            }
             <View style={styles.buyBtn}>
                 <BgButton title={isItemPurchased ? 'Purchased - Watch Now' : 'Buy Course'} color={'white'}
                     onClick={
@@ -266,6 +270,14 @@ const styles = StyleSheet.create({
         width: '90%',
         alignSelf: 'center',
         marginTop: moderateScale(10),
+    },
+    author: {
+        fontSize: moderateScale(16),
+        color: TEXT_COLOR,
+        width: '90%',
+        alignSelf: 'center',
+        marginTop: moderateScale(10),
+        fontStyle: 'italic',
     },
     seperator: {
         width: '100%',
