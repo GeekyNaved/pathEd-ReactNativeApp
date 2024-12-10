@@ -11,6 +11,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import { PencilIcon, TrashIcon, XCircleIcon } from 'react-native-heroicons/outline';
 import Loader from '../../../components/Loader';
+import NoItem from '../../../components/NoItem';
 
 const Courses = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
@@ -24,14 +25,38 @@ const Courses = ({ navigation }) => {
     getCourses();
   }, [isFocused]);
 
+  // const getCourses = async () => {
+  //   const userId = await AsyncStorage.getItem('USERID');
+  //   const data = await firestore().collection('courses').get();
+  //   let temp = [];
+  //   data.docs.forEach(item => {
+  //     temp.push({ courseId: item.id, ...item.data() });
+  //   });
+  //   setCourses(temp);
+  // };
+
   const getCourses = async () => {
-    const userId = await AsyncStorage.getItem('USERID');
-    const data = await firestore().collection('courses').get();
-    let temp = [];
-    data.docs.forEach(item => {
-      temp.push({ courseId: item.id, ...item.data() });
-    });
-    setCourses(temp);
+    try {
+      const userId = await AsyncStorage.getItem('USERID');
+      if (!userId) {
+        console.error('User ID not found');
+        return;
+      }
+
+      const data = await firestore()
+        .collection('courses')
+        .where('userId', '==', userId)
+        .get();
+
+      const temp = data.docs.map(item => ({
+        courseId: item.id,
+        ...item.data(),
+      }));
+
+      setCourses(temp);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
   };
 
 
@@ -45,7 +70,7 @@ const Courses = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={courses} renderItem={({ item, index }) => {
+      <FlatList data={courses} ListEmptyComponent={() => <NoItem message={'No Courses Present.'} />} renderItem={({ item, index }) => {
         return (
           <CourseItem item={item}
             index={index}
