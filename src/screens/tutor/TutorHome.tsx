@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CourseSell from './bottom-tabs/CourseSell';
+// import CourseSell from './bottom-tabs/CourseSell';
 import Courses from './bottom-tabs/Courses';
 import TutorProfile from './bottom-tabs/TutorProfile';
 import { TEXT_COLOR, THEME_COLOR } from '../../utils/colors';
@@ -91,7 +91,7 @@ const TutorHome = () => {
 
     >
       <Tab.Screen name="Courses" component={Courses} />
-      <Tab.Screen name="CourseSell" component={CourseSell} />
+      {/* <Tab.Screen name="CourseSell" component={CourseSell} /> */}
       <Tab.Screen name="TutorProfile" component={TutorProfile} />
     </Tab.Navigator>
   );
