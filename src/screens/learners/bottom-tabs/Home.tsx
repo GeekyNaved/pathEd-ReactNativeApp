@@ -66,7 +66,7 @@ const Home = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>Trending Courses</Text>
+            {/* <Text style={styles.heading}>Trending Courses</Text>
             <FlatList
                 showsHorizontalScrollIndicator={false}
                 horizontal
@@ -83,7 +83,7 @@ const Home = () => {
                     );
                 }}
             />
-            <Text style={styles.heading}>Latest Courses</Text>
+            <Text style={styles.heading}>Latest Courses</Text> */}
             <FlatList
                 showsHorizontalScrollIndicator={false}
                 // horizontal
