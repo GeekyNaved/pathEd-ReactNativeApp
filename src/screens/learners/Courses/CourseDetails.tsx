@@ -1,9 +1,9 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import { BG_COLOR, GRAY, TEXT_COLOR, YELLOW } from '../../../utils/colors';
+import { BG_COLOR, GRAY, TEXT_COLOR, THEME_COLOR, YELLOW } from '../../../utils/colors';
 import ChapterItem from '../../tutor/Courses/ChapterItem';
 import BorderButton from '../../../components/BorderButton';
 import BgButton from '../../../components/BgButton';
@@ -11,6 +11,7 @@ import { UserIcon } from 'react-native-heroicons/outline';
 import { StarIcon } from 'react-native-heroicons/solid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../../components/Loader';
+import RazorpayCheckout from 'react-native-razorpay';
 
 const CourseDetails = () => {
     const route = useRoute();
@@ -22,6 +23,7 @@ const CourseDetails = () => {
     const [purchasedItemsData, setPurchasedItemsData] = useState([]);
     const [isItemPresent, setIsItemPresent] = useState(false);
     const [isItemPurchased, setIsItemPurchased] = useState(false);
+    const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
@@ -31,7 +33,23 @@ const CourseDetails = () => {
         getReviews();
         checkCartItems();
         checkPurchasedItems();
+        getUserData();
     }, [isFocused]);
+
+    const getUserData = async () => {
+        setLoading(true);
+        const userId = await AsyncStorage.getItem('USERID');
+        // console.log('userId', userId);
+        const userType = await AsyncStorage.getItem('USERTYPE');
+        // console.log('userType', userType);
+        const user = await firestore().collection(userType).doc(userId).get();
+        // console.log("user.data()", user.data());
+        if (user.data != null) {
+            setUserData(user.data());
+        }
+        setLoading(false);
+    };
+
 
     const getCourseDetails = async () => {
         setLoading(true);
@@ -140,26 +158,50 @@ const CourseDetails = () => {
 
     const buyCourse = async (item, courseId) => {
         setLoading(true);
-        try {
-            const userId = await AsyncStorage.getItem('USERID');
+        const options = {
+            description: 'Course Purchase - POC',
+            image: 'https://i.imgur.com/3g7nmJC.jpg',
+            currency: 'INR',
+            key: 'rzp_test_nQzUyv7fzyesbP', // just your Razorpay key_id
+            amount: item.price * 100, // amount in paise
+            name: 'PathEd',
+            prefill: {
+                email: userData?.user?.email,
+                name: userData?.user?.name,
+            },
+            theme: { color: THEME_COLOR },
+        };
 
-            // Fetch the latest data from Firestore to avoid overwriting issues
-            const userDoc = await firestore().collection('learners').doc(userId).get();
-            let purchasedCourses = userDoc.data()?.purchasedCourses || [];
+        RazorpayCheckout.open(options)
+            .then(async (data) => {
+                console.log('Success:', data.razorpay_payment_id);
 
-            // Push the new course into the existing array
-            purchasedCourses.push({ courseId: courseId, chapters: chapters, ...item });
+                const userId = await AsyncStorage.getItem('USERID');
+                const userDoc = await firestore().collection('learners').doc(userId).get();
+                let purchasedCourses = userDoc.data()?.purchasedCourses || [];
 
-            // Update Firestore with the new array
-            await firestore().collection('learners').doc(userId).update({
-                purchasedCourses,
+                purchasedCourses.push({ courseId, chapters, ...item });
+
+                await firestore().collection('learners').doc(userId).update({
+                    purchasedCourses,
+                });
+
+                checkPurchasedItems();
+                Alert.alert(
+                    'Payment Successful',
+                    `Your payment was successful! 🎉\nTransaction ID: ${data.razorpay_payment_id}`,
+                    [
+                        {
+                            text: "OK"
+                        }
+                    ]
+                );
+            })
+            .catch((error) => {
+                console.error('Payment failed:', error);
+                Alert.alert('Payment Failed');
             });
 
-            console.log('Course successfully purchased!');
-            checkPurchasedItems(); // Refresh local data
-        } catch (error) {
-            console.error('Error buying course:', error);
-        }
         setLoading(false);
     };
 
