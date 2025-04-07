@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { moderateScale } from 'react-native-size-matters';
 import { TEXT_COLOR } from '../../../utils/colors';
@@ -9,6 +9,10 @@ import { UserIcon } from 'react-native-heroicons/outline';
 import BorderButton from '../../../components/BorderButton';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Loader from '../../../components/Loader';
+
+const PRIVACY_POLICY_URL = 'https://geekynaved.github.io/pathEd-ReactNativeApp/privacy.html';
+const TERMS_URL = 'https://geekynaved.github.io/pathEd-ReactNativeApp/terms.html';
+
 
 const TutorProfile = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -66,6 +70,13 @@ const TutorProfile = ({ navigation }) => {
           onClick={onLogout}
         />
       </View>
+      {/* Add links below */}
+      <TouchableOpacity onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
+        <Text style={styles.linkText}>Privacy Policy</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => Linking.openURL(TERMS_URL)}>
+        <Text style={styles.linkText}>Terms & Conditions</Text>
+      </TouchableOpacity>
       <Loader visible={isFocused && loading} isTransparent={false} />
 
     </View>
@@ -90,5 +101,11 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     paddingHorizontal: moderateScale(20),
+  },
+  linkText: {
+    color: '#007BFF',
+    marginTop: 10,
+    textDecorationLine: 'underline',
+    textAlign: 'center',
   },
 });
