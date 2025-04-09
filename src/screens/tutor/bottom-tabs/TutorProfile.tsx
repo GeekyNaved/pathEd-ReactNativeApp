@@ -9,6 +9,7 @@ import { UserIcon } from 'react-native-heroicons/outline';
 import BorderButton from '../../../components/BorderButton';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Loader from '../../../components/Loader';
+import AccountDeletion from '../../../components/AccountDeletion';
 
 const PRIVACY_POLICY_URL = 'https://geekynaved.github.io/pathEd-ReactNativeApp/privacy.html';
 const TERMS_URL = 'https://geekynaved.github.io/pathEd-ReactNativeApp/terms.html';
@@ -78,7 +79,7 @@ const TutorProfile = ({ navigation }) => {
         <Text style={styles.linkText}>Terms & Conditions</Text>
       </TouchableOpacity>
       <Loader visible={isFocused && loading} isTransparent={false} />
-
+      <AccountDeletion />
     </View>
   );
 };
