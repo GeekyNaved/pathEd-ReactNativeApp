@@ -57,12 +57,12 @@ const TutorProfile = ({ navigation }) => {
       </View>
       {
         userData != null && (
-          <Text style={styles.name}>{userData.user.name}</Text>
+          <Text style={styles.name}>{userData?.user?.name || userData?.displayName}</Text>
         )
       }
       {
         userData != null && (
-          <Text style={styles.name}>{userData.user.email}</Text>
+          <Text style={styles.name}>{userData.user?.email || userData?.email}</Text>
         )
       }
       <View style={styles.btnContainer}>

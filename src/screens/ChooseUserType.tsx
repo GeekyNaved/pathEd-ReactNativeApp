@@ -16,14 +16,14 @@ const ChooseUserType = () => {
                 <Text style={styles.heading}>{SELECT_USER}</Text>
                 <BgButton title={TUTOR_TITLE} color={WHITE}
                     onClick={() => navigation.navigate(
-                        'Login', {
+                        'LoginAndSignup', {
                         screen: 'tutor',
                     })
                     }
                 />
                 <BorderButton title={LEARNER_TITLE} color={THEME_COLOR}
                     onClick={() => navigation.navigate(
-                        'Login', {
+                        'LoginAndSignup', {
                         screen: 'learner',
                     }
                     )}

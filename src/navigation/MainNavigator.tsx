@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Splash from '../screens/Splash';
 import ChooseUserType from '../screens/ChooseUserType';
-import Login from '../screens/Login/Login';
 import TutorHome from '../screens/tutor/TutorHome';
 import LearnerHome from '../screens/learners/LearnerHome';
 import AddCourse from '../screens/tutor/Courses/AddCourse';
@@ -14,6 +13,8 @@ import EditCourse from '../components/courses/EditCourse';
 import CourseDetails from '../screens/learners/Courses/CourseDetails';
 import AddReview from '../screens/learners/Courses/reviews/AddReview';
 import WatchVideo from '../screens/learners/Courses/WatchVideo';
+import LoginAndSignup from '../screens/LoginAndSignup';
+import ForgetPassword from '../screens/ForgetPassword';
 
 const MainNavigator = () => {
     const Stack = createNativeStackNavigator();
@@ -27,8 +28,13 @@ const MainNavigator = () => {
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
-                    name="Login"
-                    component={Login}
+                    name="LoginAndSignup"
+                    component={LoginAndSignup}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="ForgotPassword"
+                    component={ForgetPassword}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
