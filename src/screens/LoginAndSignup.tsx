@@ -42,6 +42,7 @@ const LoginAndSignup = () => {
             //     // sign in was cancelled by user
             //   }
         } catch (error) {
+            setLoading(false);
             console.log('error:LOGIN', error);
             if (isErrorWithCode(error)) {
                 switch (error.code) {
@@ -61,6 +62,7 @@ const LoginAndSignup = () => {
     };
 
     const storeData = async data => {
+        setLoading(true);
         const collection = route.params.screen === 'tutor' ? 'tutors' : 'learners';
         const userDocRef = firestore().collection(collection).doc(data.user.id);
         try {
@@ -87,6 +89,8 @@ const LoginAndSignup = () => {
             await AsyncStorage.setItem('USERID', data.user.id);
             await AsyncStorage.setItem('USERTYPE', collection);
 
+            setLoading(false);
+
             // Navigate to the appropriate screen
             if (route.params.screen === 'tutor') {
                 navigation.navigate('TutorHome');
@@ -94,6 +98,7 @@ const LoginAndSignup = () => {
                 navigation.navigate('LearnerHome');
             }
         } catch (error) {
+            setLoading(false);
             console.error('Error storing user data:', error);
         }
     };
