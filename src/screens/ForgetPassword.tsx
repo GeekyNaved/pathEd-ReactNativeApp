@@ -12,7 +12,7 @@ import {
 import auth from '@react-native-firebase/auth';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { LIGHT_BLACK, RED, TEXT_COLOR, THEME_COLOR, WHITE } from '../utils/colors';
+import { GRAY, LIGHT_BLACK, RED, TEXT_COLOR, THEME_COLOR, WHITE } from '../utils/colors';
 import { verticalScale, moderateScale, scale } from 'react-native-size-matters';
 import Loader from '../components/Loader';
 
@@ -93,6 +93,7 @@ const ForgetPassword = () => {
                         {errMsg.length ? <Text style={styles.errMsg}>{errMsg}</Text> : null}
                         <TextInput
                             placeholder="Email"
+                            placeholderTextColor={GRAY}
                             style={styles.input}
                             onChangeText={setEmail}
                             value={email}
@@ -141,6 +142,7 @@ const styles = StyleSheet.create({
         marginVertical: verticalScale(15),
     },
     input: {
+        color: LIGHT_BLACK,
         borderColor: LIGHT_BLACK,
         borderWidth: scale(1),
         borderRadius: scale(15),

@@ -11,6 +11,7 @@ const CustomInput = ({ keyboardType, onChangeText, placeholder, value, multiline
                 onBlur={() => setIsfocused(false)}
                 onFocus={() => setIsfocused(true)}
                 onSubmitEditing={() => setIsfocused(false)}
+                placeholderTextColor={GRAY}
                 style={styles.inputTxt}
                 value={value}
                 multiline={multiline}

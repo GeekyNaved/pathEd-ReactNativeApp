@@ -15,7 +15,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { GoogleSignin, isErrorWithCode, statusCodes } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
-import { LIGHT_BLACK, RED, TEXT_COLOR, THEME_COLOR, WHITE } from '../utils/colors';
+import { GRAY, LIGHT_BLACK, RED, TEXT_COLOR, THEME_COLOR, WHITE } from '../utils/colors';
 import { verticalScale, moderateScale, scale } from 'react-native-size-matters';
 import Loader from '../components/Loader';
 
@@ -265,6 +265,7 @@ const LoginAndSignup = () => {
                         {errMsg.length ? <Text style={styles.errMsg}>{errMsg}</Text> : null}
                         <TextInput
                             placeholder="Email"
+                            placeholderTextColor={GRAY}
                             style={styles.input}
                             onChangeText={setEmail}
                             value={email}
@@ -274,6 +275,7 @@ const LoginAndSignup = () => {
                     <View style={styles.inputView}>
                         <TextInput
                             style={styles.input}
+                            placeholderTextColor={GRAY}
                             onChangeText={setPass}
                             value={pass}
                             placeholder="Password"
@@ -287,7 +289,7 @@ const LoginAndSignup = () => {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.bottomContainer}>
-                        <Text>{!signInMode ? 'Already registered? ' : 'Not registered? '}</Text>
+                        <Text style={{ color: LIGHT_BLACK }}>{!signInMode ? 'Already registered? ' : 'Not registered? '}</Text>
                         <TouchableOpacity
                             onPress={() => {
                                 setErrMsg('');
@@ -301,7 +303,7 @@ const LoginAndSignup = () => {
                     </View>
                     {signInMode ? (
                         <View style={styles.bottomContainer}>
-                            <Text>Forgot Password? </Text>
+                            <Text style={{ color: LIGHT_BLACK }}>Forgot Password? </Text>
                             <TouchableOpacity
                                 onPress={() => {
                                     // auth().sendPasswordResetEmail(email).then()
@@ -361,13 +363,14 @@ const styles = StyleSheet.create({
         marginVertical: verticalScale(15),
     },
     input: {
+        color: LIGHT_BLACK,
         borderColor: LIGHT_BLACK,
         borderWidth: scale(1),
         borderRadius: scale(15),
         paddingHorizontal: moderateScale(15),
     },
 
-    OrTxt: { fontSize: verticalScale(20), marginVertical: verticalScale(10) },
+    OrTxt: { fontSize: verticalScale(20), marginVertical: verticalScale(10), color: LIGHT_BLACK },
     signInBtn: {
         paddingHorizontal: moderateScale(15),
         paddingVertical: verticalScale(10),

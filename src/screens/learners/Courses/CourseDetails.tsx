@@ -346,8 +346,10 @@ const styles = StyleSheet.create({
         gap: moderateScale(5),
     },
     userName: {
-        // marginLeft: moderateScale(10),
         fontSize: moderateScale(16),
+        color: TEXT_COLOR,
+    },
+    rating: {
         color: TEXT_COLOR,
     },
     review: {
